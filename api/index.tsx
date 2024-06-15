@@ -96,15 +96,6 @@ app.frame('/', async (c) => {
                   </Box>
               </Box>
               <Spacer size="22" />
-              <Box
-                borderStyle="solid" 
-                borderRadius="8"
-                borderWidth="2" 
-                borderColor="darkGrey" 
-                padding="22"
-                height="96" 
-                width="100%" 
-              >
               <Columns gap="8" grow>
                 <Column width="2/4" padding="2" >
                   <Text color="black" align="start" size="32">
@@ -117,7 +108,6 @@ app.frame('/', async (c) => {
                   </Text>
                 </Column>
               </Columns>
-              </Box>
 
               <Spacer size="22" />
               {/* <Box
