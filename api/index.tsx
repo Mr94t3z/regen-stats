@@ -78,7 +78,7 @@ app.frame('/', async (c) => {
                 <img
                     height="80"
                     width="80"
-                    src='https://avatars.githubusercontent.com/u/52822242?v=4'
+                    src='/images/my-pfp.png'
                     style={{
                       borderRadius: "0%",
                       border: "3.5px solid #99A9B5",
@@ -118,7 +118,7 @@ app.frame('/', async (c) => {
                 </Column>
               </Columns>
               </Box>
-              
+
               <Spacer size="22" />
               {/* <Box
                 borderStyle="solid" 
