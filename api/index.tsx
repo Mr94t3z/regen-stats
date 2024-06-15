@@ -84,7 +84,7 @@ app.frame('/', async (c) => {
 
               <Divider color="darkGrey" />
 
-              <Spacer size="10" />
+              {/* <Spacer size="10" />
               <Columns gap="8" grow >
                 <Column width="2/4" padding="2" >
                   <Text color="black" align="start" size="32">
@@ -96,7 +96,7 @@ app.frame('/', async (c) => {
                     42000
                   </Text>
                 </Column>
-              </Columns>
+              </Columns> */}
 
               <Spacer size="10" />
               <Columns gap="8" grow >
