@@ -49,7 +49,7 @@ app.frame('/', async (c) => {
           padding="48"
           textAlign="center"
           height="100%"
-          // border="1em solid rgb(254,253,251) "
+          border="0.4em solid rgb(153,169,181)"
         >
           <VStack gap="4">
               <Heading color="red" font="playfair_display" weight="900" align="center" size="64">
@@ -58,22 +58,6 @@ app.frame('/', async (c) => {
               <Divider color="darkGrey" />
               <Spacer size="22" />
               <Box flexDirection="row" alignHorizontal="left" alignVertical="center">
-                {/* <Box 
-                  borderStyle="solid" 
-                  borderRadius="42"
-                  borderWidth="4" 
-                  borderColor="blue" 
-                  height="64" 
-                  width="64" 
-                >
-                  <Image
-                    borderRadius="38"
-                    height="56"
-                    width="56"
-                    objectFit="cover"
-                    src={userData.pfp_url}
-                  />
-                </Box> */}
 
                 <img
                     height="80"
@@ -86,6 +70,7 @@ app.frame('/', async (c) => {
                   />
                 
                 <Spacer size="12" />
+
                   <Box flexDirection="column" alignHorizontal="left">
                     <Text color="black" align="left" size="24">
                       0x94t3z
@@ -96,7 +81,25 @@ app.frame('/', async (c) => {
                   </Box>
               </Box>
               <Spacer size="22" />
-              <Columns gap="8" grow>
+
+              <Divider color="darkGrey" />
+
+              <Spacer size="10" />
+              <Columns gap="8" grow >
+                <Column width="2/4" padding="2" >
+                  <Text color="black" align="start" size="32">
+                    Allowance
+                  </Text>
+                </Column>
+                <Column width="2/4" padding="2" >
+                  <Text color="darkGrey" align="right" size="32">
+                    42000
+                  </Text>
+                </Column>
+              </Columns>
+
+              <Spacer size="10" />
+              <Columns gap="8" grow >
                 <Column width="2/4" padding="2" >
                   <Text color="black" align="start" size="32">
                     Points
@@ -108,27 +111,12 @@ app.frame('/', async (c) => {
                   </Text>
                 </Column>
               </Columns>
+              <Spacer size="10" />
+              
+              <Divider color="darkGrey" />
 
               <Spacer size="22" />
-              {/* <Box
-                borderStyle="solid" 
-                borderRadius="8"
-                borderWidth="2" 
-                borderColor="darkGrey"
-                padding="22"
-                height="128" 
-                width="100%" 
-              >
-                    <Text color="black" align="center" size="32">
-                      Points
-                    </Text>
-            
-                    <Text color="darkGrey" align="center" size="32">
-                      28481
-                    </Text>
-         
-              </Box> */}
-              {/* <Spacer size="22" /> */}
+  
               <Box flexDirection="row" justifyContent="center">
                   <Text color="black" align="center" size="14">created by</Text>
                   <Spacer size="10" />
