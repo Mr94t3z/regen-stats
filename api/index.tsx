@@ -5,8 +5,8 @@ import { Box, Columns, Column, Divider, Heading, Text, VStack, Spacer, vars } fr
 import dotenv from 'dotenv';
 
 // Uncomment this packages to tested on local server
-import { devtools } from 'frog/dev';
-import { serveStatic } from 'frog/serve-static';
+// import { devtools } from 'frog/dev';
+// import { serveStatic } from 'frog/serve-static';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -78,29 +78,22 @@ app.frame('/', async (c) => {
                   </Box>
               </Box>
               <Spacer size="22" />
-              <Box
-                  borderStyle="solid" 
-                  borderRadius="8"
-                  borderWidth="2" 
-                  borderColor="darkGrey" 
-                  padding="22"
-                  height="96" 
-                  width="100%" 
-                >
-                  <Box flexDirection="row" gap="8">
-                    <Box flex="1" >
-                      <Text color="black" align="start" size="32">
-                        Allowance
-                      </Text>
-                    </Box>
-                    <Spacer size="256" />
-                    <Box flex="1">
-                      <Text color="darkGrey" align="end" size="32">
-                        42000
-                      </Text>
-                    </Box>
-                  </Box>
-                </Box>
+              <Divider color="darkGrey" />
+              <Spacer size="10" />
+              <Columns gap="8" grow >
+                <Column width="2/4" padding="2" >
+                  <Text color="black" align="start" size="32">
+                    Allowance
+                  </Text>
+                </Column>
+                <Column width="2/4" padding="2" >
+                  <Text color="darkGrey" align="right" size="32">
+                    42000
+                  </Text>
+                </Column>
+              </Columns>
+              <Spacer size="10" />
+              <Divider color="darkGrey" />
               <Spacer size="22" />
               <Box flexDirection="row" justifyContent="center">
                   <Text color="black" align="center" size="14">created by</Text>
@@ -326,7 +319,7 @@ app.frame('/stats', async (c) => {
 })
 
 // Uncomment for local server testing
-devtools(app, { serveStatic });
+// devtools(app, { serveStatic });
 
 export const GET = handle(app)
 export const POST = handle(app)
