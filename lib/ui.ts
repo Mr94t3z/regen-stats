@@ -11,6 +11,10 @@ export const { Box, Row, Rows, Columns, Column, Divider, Image, Heading, Text, V
     darkGrey: "rgb(153,169,181)",
     grey: "rgba(128, 128, 128, 0.75)",
   },
+  frames: {
+    height: 1024,
+    width: 1024,
+  },
   fonts: {
     default: [
       {

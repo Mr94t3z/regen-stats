@@ -5,8 +5,8 @@ import { Box, Columns, Column, Divider, Heading, Text, VStack, Spacer, vars } fr
 import dotenv from 'dotenv';
 
 // Uncomment this packages to tested on local server
-// import { devtools } from 'frog/dev';
-// import { serveStatic } from 'frog/serve-static';
+import { devtools } from 'frog/dev';
+import { serveStatic } from 'frog/serve-static';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -24,8 +24,8 @@ export const app = new Frog({
   browserLocation: CAST_INTENS,
   imageAspectRatio: '1:1',
   imageOptions: {
-    height: 600,
-    width: 600,
+    height: 1024,
+    width: 1024,
   },
 }).use(
   neynar({
@@ -41,6 +41,23 @@ const baseUrlNeynarV2 = process.env.BASE_URL_NEYNAR_V2;
 app.frame('/', async (c) => {
   return c.res({
     title: 'Regen Stats',
+    image: '/initial-image',
+    intents: [
+      <TextInput placeholder="Search by username" />,
+      <Button action='/stats'>My Stats</Button>,
+      <Button action='/search'>Search</Button>,
+      <Button.Link href='https://warpcast.com/0x94t3z.eth'>Creator</Button.Link>,
+      <Button.Link href={CAST_INTENS}>Share</Button.Link>,
+    ],
+  })
+})
+
+
+app.image('/initial-image', async (c) => {
+  return c.res({
+    headers: {
+      'Cache-Control': 'max-age=0'
+    },
     image: (
       <Box
           grow
@@ -61,7 +78,7 @@ app.frame('/', async (c) => {
                 <img
                     height="80"
                     width="80"
-                    src='/images/my-pfp.png'
+                    src='https://avatars.githubusercontent.com/u/52822242?v=4'
                     style={{
                       borderRadius: "0%",
                       border: "3.5px solid #99A9B5",
@@ -103,13 +120,6 @@ app.frame('/', async (c) => {
           </VStack>
       </Box>
     ),
-    intents: [
-      <TextInput placeholder="Search by username" />,
-      <Button action='/stats'>My Stats</Button>,
-      <Button action='/search'>Search</Button>,
-      <Button.Link href='https://warpcast.com/0x94t3z.eth'>Creator</Button.Link>,
-      <Button.Link href={CAST_INTENS}>Share</Button.Link>,
-    ],
   })
 })
 
@@ -319,7 +329,7 @@ app.frame('/stats', async (c) => {
 })
 
 // Uncomment for local server testing
-// devtools(app, { serveStatic });
+devtools(app, { serveStatic });
 
 export const GET = handle(app)
 export const POST = handle(app)
