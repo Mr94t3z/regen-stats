@@ -1,7 +1,7 @@
 import { Button, Frog, TextInput } from 'frog'
 import { handle } from 'frog/vercel'
 import { neynar } from 'frog/middlewares'
-import { Box, Divider, Heading, Text, VStack, Spacer, vars } from "../lib/ui.js";
+import { Box, Columns, Column, Divider, Heading, Text, VStack, Spacer, vars } from "../lib/ui.js";
 import dotenv from 'dotenv';
 
 // Uncomment this packages to tested on local server
@@ -105,22 +105,22 @@ app.frame('/', async (c) => {
                 height="96" 
                 width="100%" 
               >
-                <Box flexDirection="row" gap="8">
-                  <Box flex="1" >
-                    <Text color="black" align="start" size="32">
-                      Allowance
-                    </Text>
-                  </Box>
-                  <Spacer size="256" />
-                  <Box flex="1" paddingRight="32">
-                    <Text color="darkGrey" align="end" size="32">
-                      42000
-                    </Text>
-                  </Box>
-                </Box>
+              <Columns gap="8" grow>
+                <Column width="2/4" padding="2" >
+                  <Text color="black" align="start" size="32">
+                    Points
+                  </Text>
+                </Column>
+                <Column width="2/4" padding="2" >
+                  <Text color="darkGrey" align="right" size="32">
+                    28481
+                  </Text>
+                </Column>
+              </Columns>
               </Box>
+              
               <Spacer size="22" />
-              <Box
+              {/* <Box
                 borderStyle="solid" 
                 borderRadius="8"
                 borderWidth="2" 
@@ -137,8 +137,8 @@ app.frame('/', async (c) => {
                       28481
                     </Text>
          
-              </Box>
-              <Spacer size="22" />
+              </Box> */}
+              {/* <Spacer size="22" /> */}
               <Box flexDirection="row" justifyContent="center">
                   <Text color="black" align="center" size="14">created by</Text>
                   <Spacer size="10" />
