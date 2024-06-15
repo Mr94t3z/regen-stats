@@ -58,7 +58,6 @@ app.frame('/', async (c) => {
               <Divider color="darkGrey" />
               <Spacer size="22" />
               <Box flexDirection="row" alignHorizontal="left" alignVertical="center">
-
                 <img
                     height="80"
                     width="80"
@@ -68,9 +67,7 @@ app.frame('/', async (c) => {
                       border: "3.5px solid #99A9B5",
                     }}
                   />
-                
                 <Spacer size="12" />
-
                   <Box flexDirection="column" alignHorizontal="left">
                     <Text color="black" align="left" size="24">
                       0x94t3z
@@ -81,42 +78,30 @@ app.frame('/', async (c) => {
                   </Box>
               </Box>
               <Spacer size="22" />
-
-              <Divider color="darkGrey" />
-
-              <Spacer size="10" />
-              <Columns gap="8" grow >
-                <Column width="2/4" padding="2" >
-                  <Text color="black" align="start" size="32">
-                    Allowance
-                  </Text>
-                </Column>
-                <Column width="2/4" padding="2" >
-                  <Text color="darkGrey" align="right" size="32">
-                    42000
-                  </Text>
-                </Column>
-              </Columns>
-
-              {/* <Spacer size="10" />
-              <Columns gap="8" grow >
-                <Column width="2/4" padding="2" >
-                  <Text color="black" align="start" size="32">
-                    Points
-                  </Text>
-                </Column>
-                <Column width="2/4" padding="2" >
-                  <Text color="darkGrey" align="right" size="32">
-                    28481
-                  </Text>
-                </Column>
-              </Columns> */}
-              <Spacer size="10" />
-              
-              <Divider color="darkGrey" />
-
+              <Box
+                  borderStyle="solid" 
+                  borderRadius="8"
+                  borderWidth="2" 
+                  borderColor="darkGrey" 
+                  padding="22"
+                  height="96" 
+                  width="100%" 
+                >
+                  <Box flexDirection="row" gap="8">
+                    <Box flex="1" >
+                      <Text color="black" align="start" size="32">
+                        Allowance
+                      </Text>
+                    </Box>
+                    <Spacer size="256" />
+                    <Box flex="1">
+                      <Text color="darkGrey" align="end" size="32">
+                        42000
+                      </Text>
+                    </Box>
+                  </Box>
+                </Box>
               <Spacer size="22" />
-  
               <Box flexDirection="row" justifyContent="center">
                   <Text color="black" align="center" size="14">created by</Text>
                   <Spacer size="10" />
