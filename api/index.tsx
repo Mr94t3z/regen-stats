@@ -1,7 +1,7 @@
 import { Button, Frog, TextInput } from 'frog'
 import { handle } from 'frog/vercel'
 import { neynar } from 'frog/middlewares'
-import { Box, Columns, Column, Divider, Heading, Text, VStack, Spacer, vars } from "../lib/ui.js";
+import { Box, Columns, Column, Image, Divider, Heading, Text, VStack, Spacer, vars, Rows, Row } from "../lib/ui.js";
 import dotenv from 'dotenv';
 
 // Uncomment this packages to tested on local server
@@ -42,82 +42,260 @@ app.frame('/', async (c) => {
   return c.res({
     title: 'Regen Stats',
     image: '/initial-image',
+    // image: (
+    //   <Box
+    //       grow
+    //       flexDirection="column"
+    //       alignHorizontal="center"
+    //       backgroundColor="bg"
+    //       padding="48"
+    //       textAlign="center"
+    //       height="100%"
+    //       gap="4"
+    //     >
+    //     <Heading color="red" font="playfair_display" weight="900" align="center" size="64">
+    //       REGEN 🍄 STATS
+    //     </Heading>
+        
+    //     <Spacer size="16" />
+        
+    //     <Box 
+    //       borderStyle="solid"
+    //       borderWidth="1"
+    //       padding="22"
+    //       borderColor="red"
+    //       height="128"
+    //       width="100%"
+    //     >
+    //       <Columns gap="8" grow >
+    //         <Column width="2/4" padding="2" flexDirection="row" alignHorizontal="left">
+    //           <img
+    //             height="128"
+    //             width="128"
+    //             src='/images/my-pfp.png'
+    //             style={{
+    //               borderRadius: "0%",
+    //               border: "2px solid #F4063F",
+    //             }}
+    //           />
+    //           <Column flexDirection="column" paddingLeft="12" paddingTop="10" paddingBottom="10">
+    //             <Text color="black" align="left" size="24">
+    //               0x94t3z
+    //             </Text>
+    //             <Text color="grey" align="left" size="18">
+    //               @{'0x94t3z.eth'}
+    //             </Text>
+    //           </Column>
+    //         </Column>
+    //         <Column flexDirection="row" alignHorizontal="right" width="2/4" paddingTop="24" paddingBottom="24" paddingLeft="12">
+    //           <Text color="darkGrey" align="center" size="20">
+    //             Fid 
+    //           </Text>
+    //           <Spacer size="10" />
+    //           <Text color="black" align="center" size="20">
+    //             397668
+    //           </Text>
+    //         </Column>
+    //       </Columns>
+    //     </Box>
+
+    //     <Spacer size="22" />
+
+    //     <Box 
+    //       borderStyle="solid"
+    //       borderWidth="1"
+    //       padding="24"
+    //       borderColor="red"
+    //       height="128"
+    //       width="100%"
+    //     >
+    //       <Box grow flexDirection="row" gap="2">
+    //         <Box backgroundColor="red" flex="1" />
+    //         <Divider color="black" direction="vertical"/>
+    //         <Box backgroundColor="red" flex="1" />
+    //         <Divider color="black" direction="vertical"/>
+    //         <Box backgroundColor="red" flex="1" />
+    //       </Box>
+    //     </Box>
+
+    //     <Spacer size="22" />
+
+    //     <Box flexDirection="row" justifyContent="center">
+    //         <Text color="black" align="center" size="14">created by</Text>
+    //         <Spacer size="10" />
+    //         <Text color="grey" decoration="underline" align="center" size="14"> @0x94t3z</Text>
+    //     </Box>
+    //   </Box>
+    // ),
     intents: [
-      <TextInput placeholder="Search by username" />,
       <Button action='/stats'>My Stats</Button>,
-      <Button action='/search'>Search</Button>,
       <Button.Link href='https://warpcast.com/0x94t3z.eth'>Creator</Button.Link>,
-      <Button.Link href={CAST_INTENS}>Share</Button.Link>,
+      // <Button.Link href={CAST_INTENS}>Share</Button.Link>,
     ],
   })
 })
 
 
 app.image('/initial-image', async (c) => {
+  const number = 42000;
+
+  const formattedNumber = number.toLocaleString();
+
   return c.res({
     headers: {
-      'Cache-Control': 'max-age=0'
+        'Cache-Control': 'max-age=0'
     },
     image: (
       <Box
           grow
-          alignVertical="center"
-          backgroundColor="bg"
+          flexDirection="column"
+          alignHorizontal="center"
+          backgroundColor="blue"
           padding="48"
           textAlign="center"
           height="100%"
-          border="0.4em solid rgb(153,169,181)"
+          gap="4"
         >
-          <VStack gap="4">
-              <Heading color="red" font="playfair_display" weight="900" align="center" size="64">
-                REGEN 🍄 STATS
-              </Heading>
-              <Divider color="darkGrey" />
-              <Spacer size="22" />
-              <Box flexDirection="row" alignHorizontal="left" alignVertical="center">
-                <img
-                    height="80"
-                    width="80"
-                    src='https://avatars.githubusercontent.com/u/52822242?v=4'
-                    style={{
-                      borderRadius: "0%",
-                      border: "3.5px solid #99A9B5",
-                    }}
-                  />
-                <Spacer size="12" />
-                  <Box flexDirection="column" alignHorizontal="left">
-                    <Text color="black" align="left" size="24">
-                      0x94t3z
-                    </Text>
-                    <Text color="grey" align="left" size="16">
-                      @{'0x94t3z.eth'}
-                    </Text>
-                  </Box>
-              </Box>
-              <Spacer size="22" />
-              <Divider color="darkGrey" />
+
+          <Column flexDirection="row" alignHorizontal="right" width="2/4" paddingTop="24" paddingBottom="24" paddingLeft="12">
+            <Heading color="red" font="playfair_display" weight="900" align="center" size="48">
+              REGEN
+            </Heading>
+              <Spacer size="6" />
+              <Image
+                  height="80"
+                  width="80"
+                  objectFit="cover"
+                  src='https://www.regen.tips/_next/image?url=%2Fimages%2Flogos%2Fregen-token-logo.png&w=1080&q=75'
+                />
+              <Spacer size="6" />
+            <Heading color="red" font="playfair_display" weight="900" align="center" size="48">
+              STATS
+            </Heading>
+          </Column>
+        
+        <Spacer size="52" />
+        
+        <Box 
+          borderStyle="solid"
+          borderWidth="1"
+          padding="24"
+          borderColor="white"
+          height="128"
+          width="100%"
+        >
+          <Columns gap="8" grow >
+            <Column width="2/4" padding="2" flexDirection="row" alignHorizontal="left">
+              <img
+                height="150"
+                width="150"
+                src='https://avatars.githubusercontent.com/u/52822242?v=4'
+                style={{
+                  borderRadius: "0%",
+                  border: "2px solid #FFFFFF",
+                }}
+              />
+              <Column flexDirection="column" paddingLeft="16" paddingTop="12" paddingBottom="12">
+                <Text color="white" align="left" size="20">
+                  0x94t3z
+                </Text>
+                <Text color="darkGrey" align="left" size="16">
+                  @{'0x94t3z.eth'}
+                </Text>
+              </Column>
+            </Column>
+            <Column flexDirection="row" alignHorizontal="right" width="2/4" paddingTop="24" paddingBottom="24" paddingLeft="12">
+              <Text color="darkGrey" align="center" size="18">
+                Fid 
+              </Text>
               <Spacer size="10" />
-              <Columns gap="8" grow >
-                <Column width="2/4" padding="2" >
-                  <Text color="black" align="start" size="32">
-                    Allowance
-                  </Text>
-                </Column>
-                <Column width="2/4" padding="2" >
-                  <Text color="darkGrey" align="right" size="32">
-                    42000
-                  </Text>
-                </Column>
-              </Columns>
-              <Spacer size="10" />
-              <Divider color="darkGrey" />
-              <Spacer size="22" />
-              <Box flexDirection="row" justifyContent="center">
-                  <Text color="black" align="center" size="14">created by</Text>
-                  <Spacer size="10" />
-                  <Text color="grey" decoration="underline" align="center" size="14"> @0x94t3z</Text>
+              <Text color="white" align="center" size="18">
+                397668
+              </Text>
+            </Column>
+          </Columns>
+        </Box>
+
+        <Spacer size="22" />
+
+        <Box 
+          borderStyle="solid"
+          borderWidth="1"
+          padding="24"
+          borderColor="white"
+          height="128"
+          width="100%"
+        >
+          <Box grow flexDirection="row" gap="2">
+              <Box flex="1">
+              {/* <Box
+                backgroundColor="white"
+                height="32"
+                width="128"
+                alignHorizontal="center"
+                alignVertical="center"
+              >
+                <Text color="blue" align="center" size="18">
+                Allowance
+                </Text>
+                
+              </Box> */}
+              <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+                <Text color="white" align="center" size="18">
+                  Allowance
+                </Text>
+                <Spacer size="10" />
+                <Text color="red" align="center" size="14">
+                  {formattedNumber}
+                </Text>
+              </Column>
+            </Box>
+            {/* <Divider color="white" direction="vertical"/> */}
+            <Box flex="1">
+            <Box
+                backgroundColor="white"
+                height="32"
+                width="128"
+                alignHorizontal="center"
+                alignVertical="center"
+              >
+                <Text color="blue" align="center" size="18">
+                Points
+                </Text>
+                
               </Box>
-          </VStack>
+              <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+                {/* <Text color="white" align="center" size="18">
+                  Points
+                </Text> */}
+                {/* <Spacer size="10" /> */}
+                <Text color="red" align="center" size="14">
+                  28,481
+                </Text>
+              </Column>
+            </Box>
+            {/* <Divider color="white" direction="vertical"/> */}
+            <Box flex="1">
+              <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+                <Text color="white" align="center" size="18">
+                  Remaining
+                </Text>
+                <Spacer size="10" />
+                <Text color="red" align="center" size="14">
+                  7,777
+                </Text>
+              </Column>
+            </Box>
+          </Box>
+        </Box>
+
+        <Spacer size="22" />
+
+        <Box flexDirection="row" justifyContent="center">
+            <Text color="white" align="center" size="14">created by</Text>
+            <Spacer size="10" />
+            <Text color="darkGrey" decoration="underline" align="center" size="14"> @0x94t3z</Text>
+        </Box>
       </Box>
     ),
   })
