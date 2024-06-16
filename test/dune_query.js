@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const apiKey = process.env.DUNE_API_KEY;
-const queryId = process.env.DUNE_QUERY_ALLOWANCE_ID;
-const fid = 397668;
+const queryId = process.env.DUNE_QUERY_TIPS_ID;
+const username = "happyquokka";
 
 //schedule the query on a 6 hour interval, and then fetch by filtering for the user fid within the query results
 //dune query where each row is a unique fid and each column is a recommended set of users: https://dune.com/queries/3509966
@@ -14,7 +14,7 @@ const meta = {
 };
 const header = new Headers(meta);
 
-const latest_response = await fetch(`https://api.dune.com/api/v1/query/${queryId}/results?&filters=fid=${fid}` //filter for single fid
+const latest_response = await fetch(`https://api.dune.com/api/v1/query/${queryId}/results?&filters=tx_fname=${username}` //filter for single fid
 , {
     method: 'GET',
     headers: header,
@@ -23,15 +23,40 @@ const latest_response = await fetch(`https://api.dune.com/api/v1/query/${queryId
 const body = await latest_response.text();
 const responseJson = JSON.parse(body);
 
-if (responseJson.result && responseJson.result.rows.length > 0) {
-    const recs = responseJson.result.rows[0]; // Assuming there's only one row as per your initial example
+const recs = responseJson.result.rows;
+
+// Define the date to filter by (today's date)
+const filterDate = new Date();
+filterDate.setHours(0, 0, 0, 0);
+
+// Filter and sum the tip_amount for valid tips with tip_datetime matching filterDate
+const filteredRecs = recs.filter(rec => {
+    const recDate = new Date(rec.tip_datetime);
+    recDate.setHours(0, 0, 0, 0);
+    return rec.is_valid === '✅ ' && recDate.getTime() === filterDate.getTime();
+});
+
+const daillyTipped = filteredRecs.reduce((sum, rec) => sum + rec.tip_amount, 0);
+const dailyAllowance = 42000;
+const remaining = dailyAllowance - daillyTipped;
+
+console.log(`Total daily tipped for ${filterDate.toDateString()}: ${daillyTipped}`);
+console.log(`Remaining allowance: ${remaining}`);
+
+
+
+// console.log('Filtered records:', filteredRecs);
+// console.log(recs);
+
+// if (responseJson.result && responseJson.result.rows.length > 0) {
+//     const recs = responseJson.result.rows[0]; // Assuming there's only one row as per your initial example
     
-    // Log individual properties of recs
-    console.log("allowance:", recs.allowance);
-    console.log("display_name:", recs.display_name);
-    console.log("fid:", recs.fid);
-    console.log("fname:", recs.fname);
+//     // Log individual properties of recs
+//     console.log("allowance:", recs.allowance);
+//     console.log("display_name:", recs.display_name);
+//     console.log("fid:", recs.fid);
+//     console.log("fname:", recs.fname);
     
-} else {
-    console.log("No rows found in the response.");
-}
+// } else {
+//     console.log("No rows found in the response.");
+// }

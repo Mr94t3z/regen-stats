@@ -1,12 +1,12 @@
 import { Button, Frog } from 'frog'
 import { handle } from 'frog/vercel'
 import { neynar } from 'frog/middlewares'
-import { Box, Columns, Column, Image, Divider, Heading, Text, VStack, Spacer, vars } from "../lib/ui.js";
+import { Box, Columns, Column, Image, Heading, Text, Spacer, vars } from "../lib/ui.js";
 import dotenv from 'dotenv';
 
 // Uncomment this packages to tested on local server
-import { devtools } from 'frog/dev';
-import { serveStatic } from 'frog/serve-static';
+// import { devtools } from 'frog/dev';
+// import { serveStatic } from 'frog/serve-static';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -45,16 +45,13 @@ app.frame('/', async (c) => {
     intents: [
       <Button action='/stats'>My Stats</Button>,
       <Button.Link href='https://warpcast.com/0x94t3z.eth'>Creator</Button.Link>,
-      // <Button.Link href={CAST_INTENS}>Share</Button.Link>,
     ],
   })
 })
 
 
 app.image('/initial-image', async (c) => {
-  const number = 42000;
-
-  const formattedNumber = number.toLocaleString();
+  const formattedDate = new Date().toUTCString();
 
   return c.res({
     headers: {
@@ -81,7 +78,7 @@ app.image('/initial-image', async (c) => {
                   height="80"
                   width="80"
                   objectFit="cover"
-                  src='https://www.regen.tips/_next/image?url=%2Fimages%2Flogos%2Fregen-token-logo.png&w=1080&q=75'
+                  src='https://raw.githubusercontent.com/Mr94t3z/regen-stats/master/public/images/icon.png'
                 />
               <Spacer size="6" />
             <Heading color="red" font="playfair_display" weight="900" align="center" size="48">
@@ -100,26 +97,26 @@ app.image('/initial-image', async (c) => {
           width="100%"
         >
           <Columns gap="8" grow >
-            <Column width="2/4" padding="2" flexDirection="row" alignHorizontal="left">
+            <Column width="3/4" padding="2" flexDirection="row" alignHorizontal="left">
               <img
                 height="150"
                 width="150"
-                src='https://avatars.githubusercontent.com/u/52822242?v=4'
+                src='https://raw.githubusercontent.com/Mr94t3z/regen-stats/master/public/images/my-pfp.png'
                 style={{
                   borderRadius: "0%",
                   border: "2px solid #FFFFFF",
                 }}
               />
-              <Column flexDirection="column" paddingLeft="16" paddingTop="12" paddingBottom="12">
-                <Text color="white" align="left" size="20">
+              <Column flexDirection="column" paddingLeft="10" paddingTop="18" paddingBottom="18">
+                <Text color="white" align="left" size="16">
                   0x94t3z
                 </Text>
-                <Text color="darkGrey" align="left" size="16">
+                <Text color="darkGrey" align="left" size="12">
                   @{'0x94t3z.eth'}
                 </Text>
               </Column>
             </Column>
-            <Column flexDirection="row" alignHorizontal="right" width="2/4" paddingTop="24" paddingBottom="24" paddingLeft="12">
+            <Column flexDirection="row" alignHorizontal="right" width="1/4" paddingTop="24" paddingBottom="24" paddingLeft="12">
               <Text color="darkGrey" align="center" size="18">
                 Fid 
               </Text>
@@ -149,7 +146,7 @@ app.image('/initial-image', async (c) => {
                 </Text>
                 <Spacer size="10" />
                 <Text color="red" align="center" size="14">
-                  {formattedNumber}
+                  42,000
                 </Text>
               </Column>
             </Box>
@@ -186,12 +183,16 @@ app.image('/initial-image', async (c) => {
           </Box>
         </Box>
 
-        <Spacer size="22" />
+        <Spacer size="10" />
 
         <Box flexDirection="row" justifyContent="center">
-            <Text color="white" align="center" size="14">created by</Text>
+            <Text color="red" align="center" size="12">({formattedDate})</Text>
+        </Box>
+
+        <Box flexDirection="row" justifyContent="center">
+            <Text color="white" align="center" size="12">created by</Text>
             <Spacer size="10" />
-            <Text color="darkGrey" decoration="underline" align="center" size="14"> @0x94t3z</Text>
+            <Text color="darkGrey" decoration="underline" align="center" size="12"> @0x94t3z</Text>
         </Box>
       </Box>
     ),
@@ -200,9 +201,9 @@ app.image('/initial-image', async (c) => {
 
 
 app.frame('/stats', async (c) => {
-  const { fid } = c.var.interactor || {}
+  const { fid, username } = c.var.interactor || {}
 
-  const embedUrlByUser = `${embedUrl}/stats/image/${fid}`;
+  const embedUrlByUser = `${embedUrl}/result/${fid}/${username}`;
 
   const SHARE_BY_USER = `${baseUrl}?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(embedUrlByUser)}`;
 
@@ -210,51 +211,47 @@ app.frame('/stats', async (c) => {
 
     return c.res({
       title: 'Regen Stats',
-      image: `/result-image/${fid}`,
+      image: `/result-image/${fid}/${username}`,
       intents: [
-        <Button action='/'>My Stats</Button>,
+        <Button action={`/result/${fid}/${username}`}>My Stats</Button>,
         <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
       ],
     })
   } catch (error) {
-    return c.res({
-      image: (
-        <Box
-            grow
-            alignVertical="center"
-            backgroundColor="bg"
-            padding="48"
-            textAlign="center"
-            height="100%"
-        >
-            <VStack gap="4">
-                <Spacer size="16" />
-                <Heading color="red" weight="900" align="center" size="32">
-                  ⚠️ Failed ⚠️
-                </Heading>
-                <Spacer size="22" />
-                <Text align="center" color="black" size="16">
-                   Uh oh, something went wrong!
-                </Text>
-                <Spacer size="22" />
-                <Box flexDirection="row" justifyContent="center">
-                    <Text color="black" align="center" size="14">created by</Text>
-                    <Spacer size="10" />
-                    <Text color="grey" decoration="underline" align="center" size="14"> @0x94t3z</Text>
-                </Box>
-            </VStack>
-        </Box>
-      ),
-      intents: [
-        <Button.Reset>Try again</Button.Reset>,
-      ]
+    return c.error({
+      message: 'Uh oh, something went wrong!',
     });
   }
 })
 
 
-app.image('/result-image/:fid', async (c) => {
-  const { fid } = c.req.param();
+app.frame('/result/:fid/:username', async (c) => {
+  const { fid, username } = c.req.param();
+
+  const embedUrlByUser = `${embedUrl}/result/${fid}/${username}`;
+
+  const SHARE_BY_USER = `${baseUrl}?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(embedUrlByUser)}`;
+
+  try {
+
+    return c.res({
+      title: 'Regen Stats',
+      image: `/result-image/${fid}/${username}`,
+      intents: [
+        <Button action={`/result/${fid}/${username}`}>My Stats</Button>,
+        <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
+      ],
+    })
+  } catch (error) {
+    return c.error({
+      message: 'Uh oh, something went wrong!',
+    });
+  }
+})
+
+
+app.image('/result-image/:fid/:username', async (c) => {
+  const { fid, username } = c.req.param();
 
   const response = await fetch(`${baseUrlNeynarV2}/user/bulk?fids=${fid}`, {
     method: 'GET',
@@ -273,26 +270,74 @@ app.image('/result-image/:fid', async (c) => {
     "x-dune-api-key": process.env.DUNE_API_KEY || '',
   };
 
-  const queryId = process.env.DUNE_QUERY_ALLOWANCE_ID;
+  const queryAllowanceId = process.env.DUNE_QUERY_ALLOWANCE_ID;
+  const queryTipsId = process.env.DUNE_QUERY_TIPS_ID;
 
   const header = new Headers(meta);
 
-  const latest_response = await fetch(`https://api.dune.com/api/v1/query/${queryId}/results?&filters=fid=${fid}` //filter for single fid
+  const latest_response_allowance = await fetch(`https://api.dune.com/api/v1/query/${queryAllowanceId}/results?&filters=fid=${fid}` //filter for single fid
   , {
     method: 'GET',
     headers: header,
   });
 
-  const body = await latest_response.text();
-  const responseJson = JSON.parse(body);
+  const bodyAllowance = await latest_response_allowance.text();
+  const responseJsonAllowance = JSON.parse(bodyAllowance);
 
-  let allowance = "0";
+  let dailyAllowance = 0;
 
-  if (responseJson.result && responseJson.result.rows.length > 0) {
-    const recs = responseJson.result.rows[0];
+  if (responseJsonAllowance.result && responseJsonAllowance.result.rows.length > 0) {
+    const recs = responseJsonAllowance.result.rows[0];
     
-    allowance = recs.allowance;
+    dailyAllowance = recs.allowance;
   }
+
+  const latest_response_points = await fetch(`https://api.dune.com/api/v1/query/${queryTipsId}/results?&filters=rx_fname=${username}` //filter for single username
+  , {
+      method: 'GET',
+      headers: header,
+  });
+    
+  const bodyPoints = await latest_response_points.text();
+  const responseJsonPoints = JSON.parse(bodyPoints);
+  
+  const point = responseJsonPoints.result.rows;
+  
+  // Filter and sum the tip_amount for valid tips
+  const points = point
+  .filter((rec: { is_valid: string; }) => rec.is_valid === '✅ ')
+  .reduce((sum: any, rec: { tip_amount: any; }) => sum + rec.tip_amount, 0);
+
+
+  const latest_response_remaining = await fetch(`https://api.dune.com/api/v1/query/${queryTipsId}/results?&filters=tx_fname=${username}` //filter for single username
+  , {
+      method: 'GET',
+      headers: header,
+  });
+    
+  const bodyRemaining = await latest_response_remaining.text();
+  const responseJsonRemaining = JSON.parse(bodyRemaining);
+  
+  const recs = responseJsonRemaining.result.rows;
+  
+  // Define the date to filter by (today's date)
+  const filterDate = new Date();
+  filterDate.setHours(0, 0, 0, 0);
+  
+  // Filter and sum the tip_amount for valid tips with tip_datetime matching filterDate
+  const filteredRecs = recs.filter((rec: { tip_datetime: string | number | Date; is_valid: string; }) => {
+      const recDate = new Date(rec.tip_datetime);
+      recDate.setHours(0, 0, 0, 0);
+      return rec.is_valid === '✅ ' && recDate.getTime() === filterDate.getTime();
+  });
+  
+  const daillyTipped = filteredRecs.reduce((sum: any, rec: { tip_amount: any; }) => sum + rec.tip_amount, 0);
+  const remainingAllowance = dailyAllowance - daillyTipped;
+
+  const formattedDate = new Date().toUTCString();
+  
+  // console.log(`Total daily tipped for ${formattedDate}: ${daillyTipped}`);
+  // console.log(`Remaining allowance: ${remainingAllowance}`);
 
   return c.res({
     headers: {
@@ -319,7 +364,7 @@ app.image('/result-image/:fid', async (c) => {
                   height="80"
                   width="80"
                   objectFit="cover"
-                  src='https://www.regen.tips/_next/image?url=%2Fimages%2Flogos%2Fregen-token-logo.png&w=1080&q=75'
+                  src='https://raw.githubusercontent.com/Mr94t3z/regen-stats/master/public/images/icon.png'
                 />
               <Spacer size="6" />
             <Heading color="red" font="playfair_display" weight="900" align="center" size="48">
@@ -338,7 +383,7 @@ app.image('/result-image/:fid', async (c) => {
           width="100%"
         >
           <Columns gap="8" grow >
-            <Column width="2/4" padding="2" flexDirection="row" alignHorizontal="left">
+            <Column width="3/4" padding="2" flexDirection="row" alignHorizontal="left">
               <img
                 height="150"
                 width="150"
@@ -348,16 +393,16 @@ app.image('/result-image/:fid', async (c) => {
                   border: "2px solid #FFFFFF",
                 }}
               />
-              <Column flexDirection="column" paddingLeft="16" paddingTop="12" paddingBottom="12">
-                <Text color="white" align="left" size="20">
+              <Column flexDirection="column" paddingLeft="10" paddingTop="18" paddingBottom="18">
+                <Text color="white" align="left" size="16">
                   {userData.display_name}
                 </Text>
-                <Text color="darkGrey" align="left" size="16">
+                <Text color="darkGrey" align="left" size="12">
                   @{userData.username}
                 </Text>
               </Column>
             </Column>
-            <Column flexDirection="row" alignHorizontal="right" width="2/4" paddingTop="24" paddingBottom="24" paddingLeft="12">
+            <Column flexDirection="row" alignHorizontal="right" width="1/4" paddingTop="24" paddingBottom="24">
               <Text color="darkGrey" align="center" size="18">
                 Fid 
               </Text>
@@ -386,13 +431,13 @@ app.image('/result-image/:fid', async (c) => {
                   Allowance
                 </Text>
                 <Spacer size="10" />
-                {Number(allowance) <= 0 ? (
-                  <Text color="red" align="center" size="12">
-                    No allowance available.
+                {dailyAllowance <= 0 ? (
+                  <Text color="grey" align="center" size="12">
+                    0
                   </Text>
                   ) : (
                   <Text color="red" align="center" size="14">
-                    {allowance.toLocaleString()}
+                    {dailyAllowance.toLocaleString()}
                   </Text>
                 )}
               </Column>
@@ -411,9 +456,15 @@ app.image('/result-image/:fid', async (c) => {
                 
               </Box>
               <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
-                <Text color="red" align="center" size="14">
-                  28,481
-                </Text>
+                {points <= 0 ? (
+                  <Text color="grey" align="center" size="12">
+                    0
+                  </Text>
+                  ) : (
+                  <Text color="red" align="center" size="14">
+                    {points.toLocaleString()}
+                  </Text>
+                )}
               </Column>
             </Box>
             <Box flex="1">
@@ -422,20 +473,30 @@ app.image('/result-image/:fid', async (c) => {
                   Remaining
                 </Text>
                 <Spacer size="10" />
-                <Text color="red" align="center" size="14">
-                  7,777
-                </Text>
+                {remainingAllowance <= 0 ? (
+                  <Text color="grey" align="center" size="12">
+                    0
+                  </Text>
+                  ) : (
+                  <Text color="red" align="center" size="14">
+                    {remainingAllowance.toLocaleString()}
+                  </Text>
+                )}
               </Column>
             </Box>
           </Box>
         </Box>
 
-        <Spacer size="22" />
+        <Spacer size="10" />
 
         <Box flexDirection="row" justifyContent="center">
-            <Text color="white" align="center" size="14">created by</Text>
+            <Text color="red" align="center" size="12">({formattedDate})</Text>
+        </Box>
+
+        <Box flexDirection="row" justifyContent="center">
+            <Text color="white" align="center" size="12">created by</Text>
             <Spacer size="10" />
-            <Text color="darkGrey" decoration="underline" align="center" size="14"> @0x94t3z</Text>
+            <Text color="darkGrey" decoration="underline" align="center" size="12"> @0x94t3z</Text>
         </Box>
       </Box>
     ),
@@ -443,7 +504,7 @@ app.image('/result-image/:fid', async (c) => {
 })
 
 // Uncomment for local server testing
-devtools(app, { serveStatic });
+// devtools(app, { serveStatic });
 
 export const GET = handle(app)
 export const POST = handle(app)
