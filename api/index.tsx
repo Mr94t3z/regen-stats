@@ -24,7 +24,7 @@ export const app = new Frog({
   browserLocation: CAST_INTENS,
   imageAspectRatio: '1:1',
   headers: {
-    'cache-control': 'no-store',
+    'cache-control': 'no-store, no-cache, must-revalidate, proxy-revalidate max-age=0, s-maxage=0',
   },
   imageOptions: {
     height: 1024,
@@ -64,7 +64,7 @@ app.frame('/', async (c) => {
 app.image('/dashboard-image', async (c) => {
   return c.res({
     headers: {
-      'cache-control': 'no-store',
+      'cache-control': 'no-store, no-cache, must-revalidate, proxy-revalidate max-age=0, s-maxage=0',
     },
     image: (
       <Box
@@ -346,7 +346,7 @@ app.image('/image-results/:fid/:username', async (c) => {
 
   return c.res({
     headers: {
-      'cache-control': 'no-store',
+      'cache-control': 'no-store, no-cache, must-revalidate, proxy-revalidate max-age=0, s-maxage=0',
     },
     image: (
       <Box
