@@ -259,7 +259,7 @@ app.frame('/results/:fid/:username', async (c) => {
 })
 
 
-app.image('/image-result/:fid/:username', async (c) => {
+app.image('/image-results/:fid/:username', async (c) => {
   const { fid, username } = c.req.param();
 
   const response = await fetch(`${baseUrlNeynarV2}/user/bulk?fids=${fid}`, {
