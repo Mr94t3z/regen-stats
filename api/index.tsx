@@ -219,7 +219,7 @@ app.frame('/check-stats', async (c) => {
       title: 'Regen Stats',
       image: `/image-result/${fid}/${username}`,
       intents: [
-        <Button action={`/result/${fid}/${username}`}>My Stats</Button>,
+        <Button action={`/results/${fid}/${username}`}>My Stats</Button>,
         <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
       ],
     })
@@ -244,7 +244,7 @@ app.frame('/results/:fid/:username', async (c) => {
       title: 'Regen Stats',
       image: `/image-result/${fid}/${username}`,
       intents: [
-        <Button action={`/result/${fid}/${username}`}>My Stats</Button>,
+        <Button action={`/results/${fid}/${username}`}>My Stats</Button>,
         <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
       ],
     })
