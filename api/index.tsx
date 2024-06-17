@@ -23,9 +23,6 @@ export const app = new Frog({
   ui: { vars },
   browserLocation: CAST_INTENS,
   imageAspectRatio: '1:1',
-  headers: {
-    'cache-control': 'max-age=0',
-  },
   imageOptions: {
     height: 1024,
     width: 1024,
@@ -220,7 +217,7 @@ app.frame('/check-stats', async (c) => {
 
     return c.res({
       title: 'Regen Stats',
-      image: `/image-results/${fid}/${username}`,
+      image: `/refreshing-image/${fid}/${username}`,
       intents: [
         <Button action={`/results/${fid}/${username}`}>My Stats</Button>,
         <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
@@ -245,7 +242,7 @@ app.frame('/results/:fid/:username', async (c) => {
 
     return c.res({
       title: 'Regen Stats',
-      image: `/image-results/${fid}/${username}`,
+      image: `/refreshing-image/${fid}/${username}`,
       intents: [
         <Button action='/check-stats'>My Stats</Button>,
         <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
@@ -259,7 +256,7 @@ app.frame('/results/:fid/:username', async (c) => {
 })
 
 
-app.image('/image-results/:fid/:username', async (c) => {
+app.image('/refreshing-image/:fid/:username', async (c) => {
   const { fid, username } = c.req.param();
 
   const response = await fetch(`${baseUrlNeynarV2}/user/bulk?fids=${fid}`, {
