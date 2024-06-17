@@ -61,7 +61,7 @@ app.frame('/', async (c) => {
 app.image('/dashboard-image', async (c) => {
   return c.res({
     headers: {
-        'Cache-Control': 'max-age=0'
+      'cache-control': 'max-age=0',
     },
     image: (
       <Box
