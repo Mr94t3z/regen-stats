@@ -25,13 +25,21 @@ const responseJson = JSON.parse(body);
 
 const recs = responseJson.result.rows;
 
-// Filter records where is_valid is '✅ '
-const validRecs = recs.filter(rec => rec.is_valid === '✅ ');
+// Get the current month and year
+const now = new Date();
+const currentMonth = now.getUTCMonth(); // 0-based (January is 0, December is 11)
+const currentYear = now.getUTCFullYear();
 
-// Sum the tip_amount for valid tips
+// Filter records for the current month and year where is_valid is '✅ '
+const validRecs = recs.filter(rec => {
+    const recDate = new Date(rec.tip_datetime);
+    return rec.is_valid === '✅ ' && recDate.getUTCFullYear() === currentYear && recDate.getUTCMonth() === currentMonth;
+});
+
+// Sum the tip_amount for valid tips within the current month
 const points = validRecs.reduce((sum, rec) => sum + rec.tip_amount, 0);
 
-console.log(`Total points: ${points}`);
+console.log(`Total points for the current month: ${points}`);
 console.log('Filtered records:', validRecs);
 
 
