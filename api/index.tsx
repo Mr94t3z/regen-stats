@@ -60,9 +60,9 @@ app.frame('/', async (c) => {
 
 app.image('/dashboard-image', async (c) => {
   return c.res({
-    // headers: {
-    //     'Cache-Control': 'max-age=0'
-    // },
+    headers: {
+        'Cache-Control': 'max-age=0'
+    },
     image: (
       <Box
           grow
@@ -217,7 +217,7 @@ app.frame('/stats', async (c) => {
 
     return c.res({
       title: 'Regen Stats',
-      image: `/result-image/${fid}/${username}`,
+      image: `/image-result/${fid}/${username}`,
       intents: [
         <Button action={`/result/${fid}/${username}`}>My Stats</Button>,
         <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
@@ -242,7 +242,7 @@ app.frame('/result/:fid/:username', async (c) => {
 
     return c.res({
       title: 'Regen Stats',
-      image: `/result-image/${fid}/${username}`,
+      image: `/image-result/${fid}/${username}`,
       intents: [
         <Button action={`/result/${fid}/${username}`}>My Stats</Button>,
         <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
@@ -256,7 +256,7 @@ app.frame('/result/:fid/:username', async (c) => {
 })
 
 
-app.image('/result-image/:fid/:username', async (c) => {
+app.image('/image-result/:fid/:username', async (c) => {
   const { fid, username } = c.req.param();
 
   const response = await fetch(`${baseUrlNeynarV2}/user/bulk?fids=${fid}`, {
@@ -344,9 +344,9 @@ app.image('/result-image/:fid/:username', async (c) => {
   // console.log(`Remaining allowance: ${remainingAllowance}`);
 
   return c.res({
-    // headers: {
-    //     'Cache-Control': 'max-age=3200'
-    // },
+    headers: {
+        'Cache-Control': 'max-age=0'
+    },
     image: (
       <Box
           grow
