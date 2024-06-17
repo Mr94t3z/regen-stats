@@ -59,7 +59,6 @@ app.frame('/', async (c) => {
 
 
 app.image('/dashboard-image', async (c) => {
-
   return c.res({
     headers: {
         'Cache-Control': 'max-age=0'
@@ -346,7 +345,7 @@ app.image('/result-image/:fid/:username', async (c) => {
 
   return c.res({
     headers: {
-        'Cache-Control': 'max-age=0'
+        'Cache-Control': 'max-age=3200'
     },
     image: (
       <Box
