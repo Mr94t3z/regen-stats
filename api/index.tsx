@@ -232,7 +232,7 @@ app.frame('/check-stats', async (c) => {
 
 
 app.frame('/results/:fid/:username', async (c) => {
-  const { fid, username } = c.var.interactor || {}
+  const { fid, username } = c.req.param();
 
   const embedUrlByUser = `${embedUrl}/results/${fid}/${username}`;
 
@@ -244,7 +244,7 @@ app.frame('/results/:fid/:username', async (c) => {
       title: 'Regen Stats',
       image: `/image-result/${fid}/${username}`,
       intents: [
-        <Button action={`/results/${fid}/${username}`}>My Stats</Button>,
+        <Button action='/check-stats'>My Stats</Button>,
         <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
       ],
     })
