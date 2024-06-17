@@ -24,7 +24,7 @@ export const app = new Frog({
   browserLocation: CAST_INTENS,
   imageAspectRatio: '1:1',
   headers: {
-    'Cache-Control': 'max-age=0'
+    'cache-control': 'max-age=0'
   },
   imageOptions: {
     height: 1024,
