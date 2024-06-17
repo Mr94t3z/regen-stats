@@ -277,6 +277,7 @@ app.image('/image-result/:fid/:username', async (c) => {
   };
 
   const queryAllowanceId = process.env.DUNE_QUERY_ALLOWANCE_ID;
+  const queryTipsReceivedId = process.env.DUNE_QUERY_TIPS_RECEIVED_ID;
   const queryTipsId = process.env.DUNE_QUERY_TIPS_ID;
 
   const header = new Headers(meta);
@@ -298,7 +299,7 @@ app.image('/image-result/:fid/:username', async (c) => {
     dailyAllowance = recs.allowance;
   }
 
-  const latest_response_points = await fetch(`https://api.dune.com/api/v1/query/${queryTipsId}/results?&filters=rx_fname=${username}` //filter for single username
+  const latest_response_points = await fetch(`https://api.dune.com/api/v1/query/${queryTipsReceivedId}/results?&filters=rx_fid=${fid}` //filter for single username
   , {
       method: 'GET',
       headers: header,
@@ -309,11 +310,8 @@ app.image('/image-result/:fid/:username', async (c) => {
   
   const point = responseJsonPoints.result.rows;
   
-  // Filter and sum the tip_amount for valid tips
-  const points = point
-  .filter((rec: { is_valid: string; }) => rec.is_valid === '✅ ')
-  .reduce((sum: any, rec: { tip_amount: any; }) => sum + rec.tip_amount, 0);
-
+  // Total points received
+  const points = point ? point.total_tips : 0;
 
   const latest_response_remaining = await fetch(`https://api.dune.com/api/v1/query/${queryTipsId}/results?&filters=tx_fname=${username}` //filter for single username
   , {
