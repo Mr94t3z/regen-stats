@@ -345,7 +345,7 @@ app.image('/image-result/:fid/:username', async (c) => {
 
   return c.res({
     headers: {
-        'Cache-Control': 'max-age=0'
+      'cache-control': 'max-age=0',
     },
     image: (
       <Box
