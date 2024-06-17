@@ -37,6 +37,14 @@ export const app = new Frog({
 // Neynar API base URL
 const baseUrlNeynarV2 = process.env.BASE_URL_NEYNAR_V2;
 
+// Get the current date and time in UTC
+const date = new Date();
+
+const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+const formattedDate = `${days[date.getUTCDay()]}, ${date.getUTCDate()} ${months[date.getUTCMonth()]} ${date.getUTCFullYear()} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}:${date.getUTCSeconds().toString().padStart(2, '0')} UTC`;
+
 
 app.frame('/', async (c) => {
   return c.res({
@@ -51,7 +59,6 @@ app.frame('/', async (c) => {
 
 
 app.image('/initial-image', async (c) => {
-  const formattedDate = new Date().toUTCString();
 
   return c.res({
     headers: {
@@ -62,7 +69,7 @@ app.image('/initial-image', async (c) => {
           grow
           flexDirection="column"
           alignHorizontal="center"
-          backgroundColor="blue"
+          backgroundColor="bg"
           padding="48"
           textAlign="center"
           height="100%"
@@ -91,57 +98,57 @@ app.image('/initial-image', async (c) => {
         <Box 
           borderStyle="solid"
           borderWidth="1"
-          padding="24"
-          borderColor="white"
-          height="128"
+          padding="12"
+          borderColor="red"
+          height="96"
           width="100%"
         >
           <Columns gap="8" grow >
             <Column width="3/4" padding="2" flexDirection="row" alignHorizontal="left">
               <img
-                height="150"
-                width="150"
+                height="128"
+                width="128"
                 src='https://raw.githubusercontent.com/Mr94t3z/regen-stats/master/public/images/my-pfp.png'
                 style={{
                   borderRadius: "0%",
-                  border: "2px solid #FFFFFF",
+                  border: "2px solid #F3033E",
                 }}
               />
               <Column flexDirection="column" paddingLeft="10" paddingTop="18" paddingBottom="18">
-                <Text color="white" align="left" size="16">
+                <Text color="black" align="left" size="16">
                   0x94t3z
                 </Text>
-                <Text color="darkGrey" align="left" size="12">
+                <Text color="grey" align="left" size="12">
                   @{'0x94t3z.eth'}
                 </Text>
               </Column>
             </Column>
-            <Column flexDirection="row" alignHorizontal="right" width="1/4" paddingTop="24" paddingBottom="24" paddingLeft="12">
-              <Text color="darkGrey" align="center" size="18">
+            <Column flexDirection="row" alignHorizontal="right" width="1/4" paddingTop="26" paddingBottom="26" paddingLeft="12">
+              <Text color="grey" align="center" size="16">
                 Fid 
               </Text>
               <Spacer size="10" />
-              <Text color="white" align="center" size="18">
+              <Text color="black" align="center" size="16">
                 397668
               </Text>
             </Column>
           </Columns>
         </Box>
 
-        <Spacer size="22" />
+        <Spacer size="16" />
 
         <Box 
           borderStyle="solid"
           borderWidth="1"
           padding="24"
-          borderColor="white"
+          borderColor="red"
           height="128"
           width="100%"
         >
           <Box grow flexDirection="row" gap="2">
               <Box flex="1">
               <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
-                <Text color="white" align="center" size="18">
+                <Text color="black" align="center" size="18">
                   Allowance
                 </Text>
                 <Spacer size="10" />
@@ -152,13 +159,13 @@ app.image('/initial-image', async (c) => {
             </Box>
             <Box flex="1">
             <Box
-                backgroundColor="white"
+                backgroundColor="red"
                 height="32"
                 width="128"
                 alignHorizontal="center"
                 alignVertical="center"
               >
-                <Text color="blue" align="center" size="18">
+                <Text color="white" align="center" size="18">
                 Points
                 </Text>
                 
@@ -171,7 +178,7 @@ app.image('/initial-image', async (c) => {
             </Box>
             <Box flex="1">
               <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
-                <Text color="white" align="center" size="18">
+                <Text color="black" align="center" size="18">
                   Remaining
                 </Text>
                 <Spacer size="10" />
@@ -190,9 +197,9 @@ app.image('/initial-image', async (c) => {
         </Box>
 
         <Box flexDirection="row" justifyContent="center">
-            <Text color="white" align="center" size="12">created by</Text>
-            <Spacer size="10" />
-            <Text color="darkGrey" decoration="underline" align="center" size="12"> @0x94t3z</Text>
+            <Text color="black" align="center" size="12">created by</Text>
+            <Spacer size="4" />
+            <Text color="grey" decoration="underline" align="center" size="12"> @0x94t3z</Text>
         </Box>
       </Box>
     ),
@@ -333,8 +340,6 @@ app.image('/result-image/:fid/:username', async (c) => {
   
   const daillyTipped = filteredRecs.reduce((sum: any, rec: { tip_amount: any; }) => sum + rec.tip_amount, 0);
   const remainingAllowance = dailyAllowance - daillyTipped;
-
-  const formattedDate = new Date().toUTCString();
   
   // console.log(`Total daily tipped for ${formattedDate}: ${daillyTipped}`);
   // console.log(`Remaining allowance: ${remainingAllowance}`);
@@ -348,7 +353,7 @@ app.image('/result-image/:fid/:username', async (c) => {
           grow
           flexDirection="column"
           alignHorizontal="center"
-          backgroundColor="blue"
+          backgroundColor="bg"
           padding="48"
           textAlign="center"
           height="100%"
@@ -377,57 +382,57 @@ app.image('/result-image/:fid/:username', async (c) => {
         <Box 
           borderStyle="solid"
           borderWidth="1"
-          padding="24"
-          borderColor="white"
-          height="128"
+          padding="12"
+          borderColor="red"
+          height="96"
           width="100%"
         >
           <Columns gap="8" grow >
             <Column width="3/4" padding="2" flexDirection="row" alignHorizontal="left">
               <img
-                height="150"
-                width="150"
+                height="128"
+                width="128"
                 src={userData.pfp_url}
                 style={{
                   borderRadius: "0%",
-                  border: "2px solid #FFFFFF",
+                  border: "2px solid #F3033E",
                 }}
               />
               <Column flexDirection="column" paddingLeft="10" paddingTop="18" paddingBottom="18">
-                <Text color="white" align="left" size="16">
-                  {userData.display_name}
+                <Text color="black" align="left" size="16">
+                {userData.display_name}
                 </Text>
-                <Text color="darkGrey" align="left" size="12">
+                <Text color="grey" align="left" size="12">
                   @{userData.username}
                 </Text>
               </Column>
             </Column>
-            <Column flexDirection="row" alignHorizontal="right" width="1/4" paddingTop="24" paddingBottom="24">
-              <Text color="darkGrey" align="center" size="18">
+            <Column flexDirection="row" alignHorizontal="right" width="1/4" paddingTop="26" paddingBottom="26" paddingLeft="12">
+              <Text color="grey" align="center" size="16">
                 Fid 
               </Text>
               <Spacer size="10" />
-              <Text color="white" align="center" size="18">
+              <Text color="black" align="center" size="16">
                 {fid}
               </Text>
             </Column>
           </Columns>
         </Box>
 
-        <Spacer size="22" />
+        <Spacer size="16" />
 
         <Box 
           borderStyle="solid"
           borderWidth="1"
           padding="24"
-          borderColor="white"
+          borderColor="red"
           height="128"
           width="100%"
         >
           <Box grow flexDirection="row" gap="2">
               <Box flex="1">
               <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
-                <Text color="white" align="center" size="18">
+                <Text color="black" align="center" size="18">
                   Allowance
                 </Text>
                 <Spacer size="10" />
@@ -444,32 +449,31 @@ app.image('/result-image/:fid/:username', async (c) => {
             </Box>
             <Box flex="1">
             <Box
-                backgroundColor="white"
+                backgroundColor="red"
                 height="32"
                 width="128"
                 alignHorizontal="center"
                 alignVertical="center"
               >
-                <Text color="blue" align="center" size="18">
+                <Text color="white" align="center" size="18">
                 Points
                 </Text>
-                
               </Box>
               <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
-                {points <= 0 ? (
-                  <Text color="grey" align="center" size="12">
-                    0
-                  </Text>
-                  ) : (
-                  <Text color="red" align="center" size="14">
-                    {points.toLocaleString()}
-                  </Text>
-                )}
+              {points <= 0 ? (
+                <Text color="grey" align="center" size="12">
+                  0
+                </Text>
+                ) : (
+                <Text color="red" align="center" size="14">
+                  {points.toLocaleString()}
+                </Text>
+              )}
               </Column>
             </Box>
             <Box flex="1">
               <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
-                <Text color="white" align="center" size="18">
+                <Text color="black" align="center" size="18">
                   Remaining
                 </Text>
                 <Spacer size="10" />
@@ -490,15 +494,172 @@ app.image('/result-image/:fid/:username', async (c) => {
         <Spacer size="10" />
 
         <Box flexDirection="row" justifyContent="center">
-            <Text color="red" align="center" size="12">({formattedDate})</Text>
+            <Text color="red" align="center" size="12">
+              ({formattedDate})
+            </Text>
         </Box>
 
         <Box flexDirection="row" justifyContent="center">
-            <Text color="white" align="center" size="12">created by</Text>
-            <Spacer size="10" />
-            <Text color="darkGrey" decoration="underline" align="center" size="12"> @0x94t3z</Text>
+            <Text color="black" align="center" size="12">created by</Text>
+            <Spacer size="4" />
+            <Text color="grey" decoration="underline" align="center" size="12"> @0x94t3z</Text>
         </Box>
       </Box>
+      // <Box
+      //     grow
+      //     flexDirection="column"
+      //     alignHorizontal="center"
+      //     backgroundColor="blue"
+      //     padding="48"
+      //     textAlign="center"
+      //     height="100%"
+      //     gap="4"
+      //   >
+
+      //     <Column flexDirection="row" alignHorizontal="right" width="2/4" paddingTop="24" paddingBottom="24" paddingLeft="12">
+      //       <Heading color="red" font="playfair_display" weight="900" align="center" size="48">
+      //         REGEN
+      //       </Heading>
+      //         <Spacer size="6" />
+      //         <Image
+      //             height="80"
+      //             width="80"
+      //             objectFit="cover"
+      //             src='https://raw.githubusercontent.com/Mr94t3z/regen-stats/master/public/images/icon.png'
+      //           />
+      //         <Spacer size="6" />
+      //       <Heading color="red" font="playfair_display" weight="900" align="center" size="48">
+      //         STATS
+      //       </Heading>
+      //     </Column>
+        
+      //   <Spacer size="52" />
+        
+      //   <Box 
+      //     borderStyle="solid"
+      //     borderWidth="1"
+      //     padding="24"
+      //     borderColor="white"
+      //     height="128"
+      //     width="100%"
+      //   >
+      //     <Columns gap="8" grow >
+      //       <Column width="3/4" padding="2" flexDirection="row" alignHorizontal="left">
+      //         <img
+      //           height="150"
+      //           width="150"
+      //           src={userData.pfp_url}
+      //           style={{
+      //             borderRadius: "0%",
+      //             border: "2px solid #FFFFFF",
+      //           }}
+      //         />
+      //         <Column flexDirection="column" paddingLeft="10" paddingTop="18" paddingBottom="18">
+      //           <Text color="white" align="left" size="16">
+      //             {userData.display_name}
+      //           </Text>
+      //           <Text color="darkGrey" align="left" size="12">
+      //             @{userData.username}
+      //           </Text>
+      //         </Column>
+      //       </Column>
+      //       <Column flexDirection="row" alignHorizontal="right" width="1/4" paddingTop="24" paddingBottom="24">
+      //         <Text color="darkGrey" align="center" size="18">
+      //           Fid 
+      //         </Text>
+      //         <Spacer size="10" />
+      //         <Text color="white" align="center" size="18">
+      //           {fid}
+      //         </Text>
+      //       </Column>
+      //     </Columns>
+      //   </Box>
+
+      //   <Spacer size="22" />
+
+      //   <Box 
+      //     borderStyle="solid"
+      //     borderWidth="1"
+      //     padding="24"
+      //     borderColor="white"
+      //     height="128"
+      //     width="100%"
+      //   >
+      //     <Box grow flexDirection="row" gap="2">
+      //         <Box flex="1">
+      //         <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+      //           <Text color="white" align="center" size="18">
+      //             Allowance
+      //           </Text>
+      //           <Spacer size="10" />
+      //           {dailyAllowance <= 0 ? (
+      //             <Text color="grey" align="center" size="12">
+      //               0
+      //             </Text>
+      //             ) : (
+      //             <Text color="red" align="center" size="14">
+      //               {dailyAllowance.toLocaleString()}
+      //             </Text>
+      //           )}
+      //         </Column>
+      //       </Box>
+      //       <Box flex="1">
+      //       <Box
+      //           backgroundColor="white"
+      //           height="32"
+      //           width="128"
+      //           alignHorizontal="center"
+      //           alignVertical="center"
+      //         >
+      //           <Text color="blue" align="center" size="18">
+      //           Points
+      //           </Text>
+                
+      //         </Box>
+      //         <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+      //           {points <= 0 ? (
+      //             <Text color="grey" align="center" size="12">
+      //               0
+      //             </Text>
+      //             ) : (
+      //             <Text color="red" align="center" size="14">
+      //               {points.toLocaleString()}
+      //             </Text>
+      //           )}
+      //         </Column>
+      //       </Box>
+      //       <Box flex="1">
+      //         <Column flexDirection="column" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+      //           <Text color="white" align="center" size="18">
+      //             Remaining
+      //           </Text>
+      //           <Spacer size="10" />
+      //           {remainingAllowance <= 0 ? (
+      //             <Text color="grey" align="center" size="12">
+      //               0
+      //             </Text>
+      //             ) : (
+      //             <Text color="red" align="center" size="14">
+      //               {remainingAllowance.toLocaleString()}
+      //             </Text>
+      //           )}
+      //         </Column>
+      //       </Box>
+      //     </Box>
+      //   </Box>
+
+      //   <Spacer size="10" />
+
+      //   <Box flexDirection="row" justifyContent="center">
+      //       <Text color="red" align="center" size="12">({formattedDate})</Text>
+      //   </Box>
+
+      //   <Box flexDirection="row" justifyContent="center">
+      //       <Text color="white" align="center" size="12">created by</Text>
+      //       <Spacer size="10" />
+      //       <Text color="darkGrey" decoration="underline" align="center" size="12"> @0x94t3z</Text>
+      //   </Box>
+      // </Box>
     ),
   })
 })
