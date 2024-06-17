@@ -60,9 +60,9 @@ app.frame('/', async (c) => {
 
 app.image('/dashboard-image', async (c) => {
   return c.res({
-    headers: {
-        'Cache-Control': 'max-age=0'
-    },
+    // headers: {
+    //     'Cache-Control': 'max-age=0'
+    // },
     image: (
       <Box
           grow
@@ -344,9 +344,9 @@ app.image('/result-image/:fid/:username', async (c) => {
   // console.log(`Remaining allowance: ${remainingAllowance}`);
 
   return c.res({
-    headers: {
-        'Cache-Control': 'max-age=3200'
-    },
+    // headers: {
+    //     'Cache-Control': 'max-age=3200'
+    // },
     image: (
       <Box
           grow
