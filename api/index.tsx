@@ -234,7 +234,7 @@ app.frame('/check-stats', async (c) => {
 app.frame('/results/:fid/:username', async (c) => {
   const { fid, username } = c.req.param();
 
-  const embedUrlByUser = `${embedUrl}/result/${fid}/${username}`;
+  const embedUrlByUser = `${embedUrl}/results/${fid}/${username}`;
 
   const SHARE_BY_USER = `${baseUrl}?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(embedUrlByUser)}`;
 
