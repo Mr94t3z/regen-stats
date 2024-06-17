@@ -51,7 +51,7 @@ app.frame('/', async (c) => {
     title: 'Regen Stats',
     image: '/dashboard-image',
     intents: [
-      <Button action='/stats'>My Stats</Button>,
+      <Button action='/check-stats'>My Stats</Button>,
       <Button.Link href='https://warpcast.com/0x94t3z.eth'>Creator</Button.Link>,
     ],
   })
@@ -206,10 +206,10 @@ app.image('/dashboard-image', async (c) => {
 })
 
 
-app.frame('/stats', async (c) => {
+app.frame('/check-stats', async (c) => {
   const { fid, username } = c.var.interactor || {}
 
-  const embedUrlByUser = `${embedUrl}/result/${fid}/${username}`;
+  const embedUrlByUser = `${embedUrl}/results/${fid}/${username}`;
 
   const SHARE_BY_USER = `${baseUrl}?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(embedUrlByUser)}`;
 
@@ -231,7 +231,7 @@ app.frame('/stats', async (c) => {
 })
 
 
-app.frame('/result/:fid/:username', async (c) => {
+app.frame('/results/:fid/:username', async (c) => {
   const { fid, username } = c.req.param();
 
   const embedUrlByUser = `${embedUrl}/result/${fid}/${username}`;
