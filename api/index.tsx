@@ -232,7 +232,7 @@ app.frame('/check-stats', async (c) => {
 
 
 app.frame('/results/:fid/:username', async (c) => {
-  const { fid, username } = c.req.param();
+  const { fid, username } = c.var.interactor || {}
 
   const embedUrlByUser = `${embedUrl}/results/${fid}/${username}`;
 
