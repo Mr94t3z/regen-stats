@@ -311,7 +311,7 @@ app.image('/image-result/:fid/:username', async (c) => {
   const bodyPoints = await latest_response_points.text();
   const responseJsonPoints = JSON.parse(bodyPoints);
   
-  const point = responseJsonPoints.result.rows;
+  const point = responseJsonPoints.result.rows[0];
   
   // Total points received
   const points = point ? point.total_tips : 0;
