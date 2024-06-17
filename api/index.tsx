@@ -24,7 +24,7 @@ export const app = new Frog({
   browserLocation: CAST_INTENS,
   imageAspectRatio: '1:1',
   headers: {
-    'cache-control': 'max-age=0',
+    'cache-control': 'no-store',
   },
   imageOptions: {
     height: 1024,
@@ -64,7 +64,7 @@ app.frame('/', async (c) => {
 app.image('/dashboard-image', async (c) => {
   return c.res({
     headers: {
-      'cache-control': 'max-age=0',
+      'cache-control': 'no-store',
     },
     image: (
       <Box
@@ -346,7 +346,7 @@ app.image('/image-results/:fid/:username', async (c) => {
 
   return c.res({
     headers: {
-      'cache-control': 'max-age=0',
+      'cache-control': 'no-store',
     },
     image: (
       <Box
