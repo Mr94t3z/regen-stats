@@ -2,6 +2,7 @@ import { Button, Frog } from 'frog'
 import { handle } from 'frog/vercel'
 import { neynar } from 'frog/middlewares'
 import { Box, Columns, Column, Image, Heading, Text, Spacer, vars } from "../lib/ui.js";
+import sharp from 'sharp';
 import dotenv from 'dotenv';
 
 // Uncomment this packages to tested on local server
@@ -39,6 +40,11 @@ export const app = new Frog({
 
 // Neynar API base URL
 const baseUrlNeynarV2 = process.env.BASE_URL_NEYNAR_V2;
+
+// Dune API query IDs
+const queryAllowanceId = process.env.DUNE_QUERY_ALLOWANCE_ID;
+const queryTipsReceivedId = process.env.DUNE_QUERY_TIPS_RECEIVED_ID;
+const queryTipsId = process.env.DUNE_QUERY_TIPS_ID;
 
 // Get the current date and time in UTC
 const date = new Date();
@@ -262,7 +268,7 @@ app.frame('/results/:fid/:username', async (c) => {
 app.image('/image-results/:fid/:username', async (c) => {
   const { fid, username } = c.req.param();
 
-  const response = await fetch(`${baseUrlNeynarV2}/user/bulk?fids=${fid}`, {
+  const userResponse = await fetch(`${baseUrlNeynarV2}/user/bulk?fids=${fid}`, {
     method: 'GET',
     headers: {
       'accept': 'application/json',
@@ -270,76 +276,52 @@ app.image('/image-results/:fid/:username', async (c) => {
     },
   });
 
-  const data = await response.json();
-  const userData = data.users[0];
+  const userData = await userResponse.json();
+  const user = userData.users[0];
 
-  //schedule the query on a 6 hour interval, and then fetch by filtering for the user fid within the query results
-  //dune query where each row is a unique fid and each column is a recommended set of users: https://dune.com/queries/3509966
-  const meta = {
-    "x-dune-api-key": process.env.DUNE_API_KEY || '',
-  };
-
-  const queryAllowanceId = process.env.DUNE_QUERY_ALLOWANCE_ID;
-  const queryTipsReceivedId = process.env.DUNE_QUERY_TIPS_RECEIVED_ID;
-  const queryTipsId = process.env.DUNE_QUERY_TIPS_ID;
-
-  const header = new Headers(meta);
-
-  const latest_response_allowance = await fetch(`https://api.dune.com/api/v1/query/${queryAllowanceId}/results?&filters=fid=${fid}` //filter for single fid
-  , {
-    method: 'GET',
-    headers: header,
-  });
-
-  const bodyAllowance = await latest_response_allowance.text();
-  const responseJsonAllowance = JSON.parse(bodyAllowance);
-
-  let dailyAllowance = 0;
-
-  if (responseJsonAllowance.result && responseJsonAllowance.result.rows.length > 0) {
-    const recs = responseJsonAllowance.result.rows[0];
-    
-    dailyAllowance = recs.allowance;
+  // Fetch the user's profile picture
+  const imageResponse = await fetch(user.pfp_url);
+  if (!imageResponse.ok) {
+    throw new Error(`Failed to fetch image: ${imageResponse.statusText}`);
   }
+  const imageArrayBuffer = await imageResponse.arrayBuffer();
 
-  const latest_response_points = await fetch(`https://api.dune.com/api/v1/query/${queryTipsReceivedId}/results?&filters=rx_fid=${fid}` //filter for single username
-  , {
-      method: 'GET',
-      headers: header,
-  });
-    
-  const bodyPoints = await latest_response_points.text();
-  const responseJsonPoints = JSON.parse(bodyPoints);
-  
-  const point = responseJsonPoints.result.rows[0];
-  
-  // Total points received
-  const points = point ? point.total_tips : 0;
+  // Convert the WebP image to PNG using sharp
+  const pngBuffer = await sharp(imageArrayBuffer).toFormat('png').toBuffer();
 
-  const latest_response_remaining = await fetch(`https://api.dune.com/api/v1/query/${queryTipsId}/results?&filters=tx_fname=${username}` //filter for single username
-  , {
-      method: 'GET',
-      headers: header,
+  const imageSrc = `data:image/png;base64,${pngBuffer.toString('base64')}`;
+
+  // Process query results from Dune API (omitted for brevity, assuming same as your code)
+  const header = new Headers({
+    'x-dune-api-key': process.env.DUNE_API_KEY || '',
   });
-    
-  const bodyRemaining = await latest_response_remaining.text();
-  const responseJsonRemaining = JSON.parse(bodyRemaining);
-  
-  const recs = responseJsonRemaining.result.rows;
-  
-  // Define the date to filter by (today's date)
-  const filterDate = new Date();
-  filterDate.setHours(0, 0, 0, 0);
-  
-  // Filter and sum the tip_amount for valid tips with tip_datetime matching filterDate
-  const filteredRecs = recs.filter((rec: { tip_datetime: string | number | Date; is_valid: string; }) => {
-      const recDate = new Date(rec.tip_datetime);
-      recDate.setHours(0, 0, 0, 0);
-      return rec.is_valid === '✅ ' && recDate.getTime() === filterDate.getTime();
-  });
-  
-  const daillyTipped = filteredRecs.reduce((sum: any, rec: { tip_amount: any; }) => sum + rec.tip_amount, 0);
-  const remainingAllowance = dailyAllowance - daillyTipped;
+
+  const [allowanceResponse, pointsResponse, remainingResponse] = await Promise.all([
+    fetch(`https://api.dune.com/api/v1/query/${queryAllowanceId}/results?filters=fid=${fid}`, { headers: header }),
+    fetch(`https://api.dune.com/api/v1/query/${queryTipsReceivedId}/results?filters=rx_fid=${fid}`, { headers: header }),
+    fetch(`https://api.dune.com/api/v1/query/${queryTipsId}/results?filters=tx_fname=${username}`, { headers: header })
+  ]);
+
+  const [allowanceData, pointsData, remainingData] = await Promise.all([
+    allowanceResponse.json(),
+    pointsResponse.json(),
+    remainingResponse.json()
+  ]);
+
+  // Process query results
+  const dailyAllowance = allowanceData.result?.rows[0]?.allowance || 0;
+  const points = pointsData.result?.rows[0]?.total_tips || 0;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const filteredRecs = remainingData.result?.rows.filter((rec: { tip_datetime: string | number | Date; is_valid: string; }) => {
+    const recDate = new Date(rec.tip_datetime);
+    recDate.setHours(0, 0, 0, 0);
+    return rec.is_valid === '✅' && recDate.getTime() === today.getTime();
+  }) || [];
+
+  const dailyTipped = filteredRecs.reduce((sum: any, rec: { tip_amount: any; }) => sum + rec.tip_amount, 0);
+  const remainingAllowance = dailyAllowance - dailyTipped;
   
   // console.log(`Total daily tipped for ${formattedDate}: ${daillyTipped}`);
   // console.log(`Remaining allowance: ${remainingAllowance}`);
@@ -392,7 +374,7 @@ app.image('/image-results/:fid/:username', async (c) => {
               <img
                 height="128"
                 width="128"
-                src={userData.pfp_url}
+                src={imageSrc}
                 style={{
                   borderRadius: "0%",
                   border: "2px solid #F3033E",
@@ -400,10 +382,10 @@ app.image('/image-results/:fid/:username', async (c) => {
               />
               <Column flexDirection="column" paddingLeft="10" paddingTop="18" paddingBottom="18">
                 <Text color="black" align="left" size="16">
-                {userData.display_name}
+                {user.display_name}
                 </Text>
                 <Text color="grey" align="left" size="12">
-                  @{userData.username}
+                  @{user.username}
                 </Text>
               </Column>
             </Column>

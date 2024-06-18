@@ -5,7 +5,7 @@ dotenv.config();
 
 const apiKey = process.env.DUNE_API_KEY;
 const queryId = process.env.DUNE_QUERY_TIPS_RECEIVED_ID;
-const fid = 18203;
+const fid = 397668;
 const username = "0x94t3z.eth";
 
 //schedule the query on a 6 hour interval, and then fetch by filtering for the user fid within the query results
