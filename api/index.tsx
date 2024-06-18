@@ -268,6 +268,15 @@ app.frame('/results/:fid/:username', async (c) => {
 app.image('/image-results/:fid/:username', async (c) => {
   const { fid, username } = c.req.param();
 
+  // Get the current date and time in UTC
+  const date = new Date();
+
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const formattedDate = `${days[date.getUTCDay()]}, ${date.getUTCDate()} ${months[date.getUTCMonth()]} ${date.getUTCFullYear()} ${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')}:${date.getUTCSeconds().toString().padStart(2, '0')} UTC`;
+
+  // Fetch the user's data from Neynar API
   const userResponse = await fetch(`${baseUrlNeynarV2}/user/bulk?fids=${fid}`, {
     method: 'GET',
     headers: {
