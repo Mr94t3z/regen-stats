@@ -280,7 +280,7 @@ app.image('/image-results/:fid/:username', async (c) => {
   };
 
   const queryAllowanceId = process.env.DUNE_QUERY_ALLOWANCE_ID;
-  const queryTipsReceivedId = process.env.DUNE_QUERY_TIPS_RECEIVED_ID;
+  // const queryTipsReceivedId = process.env.DUNE_QUERY_TIPS_RECEIVED_ID;
   const queryTipsId = process.env.DUNE_QUERY_TIPS_ID;
 
   const header = new Headers(meta);
@@ -302,7 +302,7 @@ app.image('/image-results/:fid/:username', async (c) => {
     dailyAllowance = recs.allowance;
   }
 
-  const latest_response_points = await fetch(`https://api.dune.com/api/v1/query/${queryTipsReceivedId}/results?&filters=rx_fid=${fid}` //filter for single username
+  const latest_response_points = await fetch(`https://api.dune.com/api/v1/query/${queryTipsId}/results?&filters=rx_fname=${username}` //filter for single username
   , {
       method: 'GET',
       headers: header,
@@ -311,10 +311,26 @@ app.image('/image-results/:fid/:username', async (c) => {
   const bodyPoints = await latest_response_points.text();
   const responseJsonPoints = JSON.parse(bodyPoints);
   
-  const point = responseJsonPoints.result.rows[0];
+  const point = responseJsonPoints.result.rows;
   
-  // Total points received
-  const points = point ? point.total_tips : 0;
+  // Filter and sum the tip_amount for valid tips
+  const points = point
+  .filter((rec: { is_valid: string; }) => rec.is_valid === '✅ ')
+  .reduce((sum: any, rec: { tip_amount: any; }) => sum + rec.tip_amount, 0);
+
+  // const latest_response_points = await fetch(`https://api.dune.com/api/v1/query/${queryTipsReceivedId}/results?&filters=rx_fid=${fid}` //filter for single username
+  // , {
+  //     method: 'GET',
+  //     headers: header,
+  // });
+    
+  // const bodyPoints = await latest_response_points.text();
+  // const responseJsonPoints = JSON.parse(bodyPoints);
+  
+  // const point = responseJsonPoints.result.rows[0];
+  
+  // // Total points received
+  // const points = point ? point.total_tips : 0;
 
   const latest_response_remaining = await fetch(`https://api.dune.com/api/v1/query/${queryTipsId}/results?&filters=tx_fname=${username}` //filter for single username
   , {
@@ -392,7 +408,7 @@ app.image('/image-results/:fid/:username', async (c) => {
               <img
                 height="128"
                 width="128"
-                src='https://raw.githubusercontent.com/Mr94t3z/regen-stats/master/public/images/my-pfp.png'
+                src={userData.pfp_url}
                 style={{
                   borderRadius: "0%",
                   border: "2px solid #F3033E",
