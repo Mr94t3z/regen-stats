@@ -392,7 +392,7 @@ app.image('/image-results/:fid/:username', async (c) => {
               <img
                 height="128"
                 width="128"
-                src={userData.pfp_url}
+                src='https://raw.githubusercontent.com/Mr94t3z/regen-stats/master/public/images/my-pfp.png'
                 style={{
                   borderRadius: "0%",
                   border: "2px solid #F3033E",
