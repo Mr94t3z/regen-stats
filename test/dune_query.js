@@ -4,9 +4,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const apiKey = process.env.DUNE_API_KEY;
-const queryId = process.env.DUNE_QUERY_TIPS_RECEIVED_ID;
-const fid = 397668;
-const username = "0x94t3z.eth";
+const queryId = process.env.DUNE_QUERY_DAILY_TIPS_ID;
+const fid = 316454;
+const username = "happyquokka";
 
 //schedule the query on a 6 hour interval, and then fetch by filtering for the user fid within the query results
 //dune query where each row is a unique fid and each column is a recommended set of users: https://dune.com/queries/3509966
@@ -15,7 +15,7 @@ const meta = {
 };
 const header = new Headers(meta);
 
-const latest_response = await fetch(`https://api.dune.com/api/v1/query/${queryId}/results?&filters=rx_fid=${fid}` //filter for single fid
+const latest_response = await fetch(`https://api.dune.com/api/v1/query/${queryId}/results?&filters=tx_fname=${username}` //filter for single fid
 , {
     method: 'GET',
     headers: header,
@@ -26,9 +26,9 @@ const responseJson = JSON.parse(body);
 
 const recs = responseJson.result.rows[0];
 
-const total_tips = recs ? recs.total_tips : 0;
+const remaining = recs ? recs.allowance_remaining : 0;
 
-console.log(`Total tips received for ${username}: ${total_tips}`);
+console.log(`Total tips received for ${username}: ${remaining}`);
 
 
 

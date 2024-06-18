@@ -44,7 +44,7 @@ const baseUrlNeynarV2 = process.env.BASE_URL_NEYNAR_V2;
 // Dune API query IDs
 const queryAllowanceId = process.env.DUNE_QUERY_ALLOWANCE_ID;
 const queryTipsReceivedId = process.env.DUNE_QUERY_TIPS_RECEIVED_ID;
-const queryTipsId = process.env.DUNE_QUERY_TIPS_ID;
+const queryDailyTipsId = process.env.DUNE_QUERY_DAILY_TIPS_ID;
 
 // Get the current date and time in UTC
 const date = new Date();
@@ -308,7 +308,7 @@ app.image('/image-results/:fid/:username', async (c) => {
   const [allowanceResponse, pointsResponse, remainingResponse] = await Promise.all([
     fetch(`https://api.dune.com/api/v1/query/${queryAllowanceId}/results?filters=fid=${fid}`, { headers: header }),
     fetch(`https://api.dune.com/api/v1/query/${queryTipsReceivedId}/results?filters=rx_fid=${fid}`, { headers: header }),
-    fetch(`https://api.dune.com/api/v1/query/${queryTipsId}/results?filters=tx_fname=${username}`, { headers: header })
+    fetch(`https://api.dune.com/api/v1/query/${queryDailyTipsId}/results?filters=tx_fname=${username}`, { headers: header })
   ]);
 
   const [allowanceData, pointsData, remainingData] = await Promise.all([
@@ -320,20 +320,7 @@ app.image('/image-results/:fid/:username', async (c) => {
   // Process query results
   const dailyAllowance = allowanceData.result?.rows[0]?.allowance || 0;
   const points = pointsData.result?.rows[0]?.total_tips || 0;
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const filteredRecs = remainingData.result?.rows.filter((rec: { tip_datetime: string | number | Date; is_valid: string; }) => {
-    const recDate = new Date(rec.tip_datetime);
-    recDate.setHours(0, 0, 0, 0);
-    return rec.is_valid === '✅' && recDate.getTime() === today.getTime();
-  }) || [];
-
-  const dailyTipped = filteredRecs.reduce((sum: any, rec: { tip_amount: any; }) => sum + rec.tip_amount, 0);
-  const remainingAllowance = dailyAllowance - dailyTipped;
-  
-  // console.log(`Total daily tipped for ${formattedDate}: ${daillyTipped}`);
-  // console.log(`Remaining allowance: ${remainingAllowance}`);
+  const remainingAllowance = remainingData.result?.rows[0]?.allowance_remaining || 0;
 
   return c.res({
     headers: {
